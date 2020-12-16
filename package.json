@@ -1,0 +1,17 @@
+{
+  "name": "treasure-hunters",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Niko <me@home>",
+  "license": "MIT",
+  "dependencies": {
+    "ol": "^6.4.3"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build --experimental-scope-hoisting --public-url . src/index.html"
+  }
+}
