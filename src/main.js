@@ -12,6 +12,8 @@ import cityIconSvg from './city-icon.svg';
 import pathIconSvg from './path-icon.svg';
 import playerIconSvg from './player-icon.svg';
 import { fromLonLat } from 'ol/proj';
+import { defaults } from 'ol/interaction';
+import Drag from './drag';
 
 const cities = [{
   lonLat: [-5.8340, 35.7595],
@@ -118,6 +120,7 @@ const mapLayer = new TileLayer({
 });
 
 const map = new Map({
+  interactions: defaults().extend([new Drag()]),
   layers: [
     mapLayer,
     cityVectorLayer,
