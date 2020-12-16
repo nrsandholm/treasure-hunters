@@ -10,6 +10,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import cityIconSvg from './city-icon.svg';
 import pathIconSvg from './path-icon.svg';
+import playerIconSvg from './player-icon.svg';
 import { fromLonLat } from 'ol/proj';
 
 const cities = [{
@@ -44,6 +45,11 @@ const paths = [
   getPath(cities[2], cities[0]),
 ];
 
+const players = [{
+  lonLat: [-5.8340, 35.7595],
+  name: 'Player #1'
+}];
+
 const cityIcon = new Style({
   image: new Icon({
     src: cityIconSvg
@@ -53,6 +59,12 @@ const cityIcon = new Style({
 const pathIcon = new Style({
   image: new Icon({
     src: pathIconSvg
+  }),
+});
+
+const playerIcon = new Style({
+  image: new Icon({
+    src: playerIconSvg
   }),
 });
 
@@ -87,6 +99,20 @@ const pathVectorLayer = new VectorLayer({
   source: pathVectorSource,
 });
 
+const playerVectorSource = new VectorSource({
+  features: players.map((c) => {
+    const { name, lonLat } = c;
+    const geometry = new Point(fromLonLat(lonLat));
+    const f = new Feature({ name, geometry });
+    f.setStyle(playerIcon);
+    return f;
+  }),
+});
+
+const playerVectorLayer = new VectorLayer({
+  source: playerVectorSource,
+});
+
 const mapLayer = new TileLayer({
   source: new OSM(),
 });
@@ -96,6 +122,7 @@ const map = new Map({
     mapLayer,
     cityVectorLayer,
     pathVectorLayer,
+    playerVectorLayer,
   ],
   target: 'map',
   view: new View({
