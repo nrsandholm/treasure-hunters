@@ -15,6 +15,27 @@ import { fromLonLat } from 'ol/proj';
 import { defaults } from 'ol/interaction';
 import Drag from './drag';
 
+let webSocket = new WebSocket('ws://localhost:8080');
+
+webSocket.onmessage = function incoming(message) {
+  console.log(message);
+
+  const data = JSON.parse(message.data);
+
+  const feature = playerVectorSource.getFeatureById(data.id);
+  const geometry = feature.getGeometry();
+  const coordinate = geometry.getCoordinates();
+
+  const deltaX = data.coordinate[0] - coordinate[0];
+  const deltaY = data.coordinate[1] - coordinate[1];
+
+  geometry.translate(deltaX, deltaY);
+};
+
+webSocket.onclose = function close() {
+  console.log('Connection closed');
+}
+
 const cities = [{
   lonLat: [-5.8340, 35.7595],
   name: 'Tangier',
@@ -102,10 +123,11 @@ const pathVectorLayer = new VectorLayer({
 });
 
 const playerVectorSource = new VectorSource({
-  features: players.map((c) => {
+  features: players.map((c, index) => {
     const { name, lonLat } = c;
     const geometry = new Point(fromLonLat(lonLat));
     const f = new Feature({ name, geometry, draggable: true });
+    f.setId(index);
     f.setStyle(playerIcon);
     return f;
   }),
@@ -120,7 +142,7 @@ const mapLayer = new TileLayer({
 });
 
 const map = new Map({
-  interactions: defaults().extend([new Drag()]),
+  interactions: defaults().extend([new Drag(webSocket)]),
   layers: [
     mapLayer,
     cityVectorLayer,

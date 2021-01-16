@@ -6,7 +6,7 @@ import {
 } from 'ol/interaction';
 
 const Drag = /*@__PURE__*/(function (PointerInteraction) {
-  function Drag() {
+  function Drag(webSocket) {
     PointerInteraction.call(this, {
       handleDownEvent: handleDownEvent,
       handleDragEvent: handleDragEvent,
@@ -39,6 +39,8 @@ const Drag = /*@__PURE__*/(function (PointerInteraction) {
     this.previousCursor_ = undefined;
 
     this.coordinateOriginal_ = null;
+
+    this.webSocket_ = webSocket;
   }
 
   if ( PointerInteraction ) Drag.__proto__ = PointerInteraction;
@@ -121,6 +123,8 @@ function handleUpEvent(evt) {
 
     const geometry = this.feature_.getGeometry();
     geometry.translate(deltaX, deltaY);
+  } else {
+    this.webSocket_.send(JSON.stringify({ id: this.feature_.getId(), coordinate: evt.coordinate }));
   }
 
   this.coordinateOriginal_ = null;
