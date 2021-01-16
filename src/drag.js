@@ -53,9 +53,9 @@ const Drag = /*@__PURE__*/(function (PointerInteraction) {
  * @return {boolean} `true` to start the drag sequence.
  */
 function handleDownEvent(evt) {
-  var map = evt.map;
+  const map = evt.map;
 
-  var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
     return feature.get('draggable') ? feature : null;
   });
 
@@ -73,10 +73,10 @@ function handleDownEvent(evt) {
  * @param {import("../src/ol/MapBrowserEvent.js").default} evt Map browser event.
  */
 function handleDragEvent(evt) {
-  var deltaX = evt.coordinate[0] - this.coordinate_[0];
-  var deltaY = evt.coordinate[1] - this.coordinate_[1];
+  const deltaX = evt.coordinate[0] - this.coordinate_[0];
+  const deltaY = evt.coordinate[1] - this.coordinate_[1];
 
-  var geometry = this.feature_.getGeometry();
+  const geometry = this.feature_.getGeometry();
   geometry.translate(deltaX, deltaY);
 
   this.coordinate_[0] = evt.coordinate[0];
@@ -88,11 +88,11 @@ function handleDragEvent(evt) {
  */
 function handleMoveEvent(evt) {
   if (this.cursor_) {
-    var map = evt.map;
-    var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    const map = evt.map;
+    const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
       return feature;
     });
-    var element = evt.map.getTargetElement();
+    const element = evt.map.getTargetElement();
     if (feature) {
       if (element.style.cursor != this.cursor_) {
         this.previousCursor_ = element.style.cursor;
