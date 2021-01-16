@@ -74,7 +74,7 @@ const cityVectorSource = new VectorSource({
   features: cities.map((c) => {
     const { name, lonLat } = c;
     const geometry = new Point(fromLonLat(lonLat));
-    const f = new Feature({ name, geometry });
+    const f = new Feature({ name, geometry, droppable: true });
     f.setStyle(cityIcon);
     return f;
   }),
@@ -91,7 +91,7 @@ const pathVectorSource = new VectorSource({
     }, [])
     .map((step) => {
       const geometry = new Point(fromLonLat(step));
-      const f = new Feature({ geometry });
+      const f = new Feature({ geometry, droppable: true });
       f.setStyle(pathIcon);
       return f;
     })
@@ -105,7 +105,7 @@ const playerVectorSource = new VectorSource({
   features: players.map((c) => {
     const { name, lonLat } = c;
     const geometry = new Point(fromLonLat(lonLat));
-    const f = new Feature({ name, geometry });
+    const f = new Feature({ name, geometry, draggable: true });
     f.setStyle(playerIcon);
     return f;
   }),

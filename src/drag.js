@@ -37,6 +37,8 @@ const Drag = /*@__PURE__*/(function (PointerInteraction) {
      * @private
      */
     this.previousCursor_ = undefined;
+
+    this.coordinateOriginal_ = null;
   }
 
   if ( PointerInteraction ) Drag.__proto__ = PointerInteraction;
@@ -54,10 +56,12 @@ function handleDownEvent(evt) {
   var map = evt.map;
 
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    return feature;
+    return feature.get('draggable') ? feature : null;
   });
 
   if (feature) {
+    const [x, y] = evt.coordinate;
+    this.coordinateOriginal_ = [x, y];
     this.coordinate_ = evt.coordinate;
     this.feature_ = feature;
   }
@@ -104,7 +108,22 @@ function handleMoveEvent(evt) {
 /**
  * @return {boolean} `false` to stop the drag sequence.
  */
-function handleUpEvent() {
+function handleUpEvent(evt) {
+  const map = evt.map;
+
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    return feature.get('droppable') ? feature : null;
+  });
+
+  if (!feature) {
+    const deltaX = this.coordinateOriginal_[0] - evt.coordinate[0];
+    const deltaY = this.coordinateOriginal_[1] - evt.coordinate[1];
+
+    const geometry = this.feature_.getGeometry();
+    geometry.translate(deltaX, deltaY);
+  }
+
+  this.coordinateOriginal_ = null;
   this.coordinate_ = null;
   this.feature_ = null;
   return false;
