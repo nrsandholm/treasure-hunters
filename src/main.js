@@ -73,19 +73,19 @@ const players = [{
   name: 'Player #1'
 }];
 
-const cityIcon = new Style({
+const cityIconStyle = new Style({
   image: new Icon({
     src: cityIconSvg
   }),
 });
 
-const pathIcon = new Style({
+const pathIconStyle = new Style({
   image: new Icon({
     src: pathIconSvg
   }),
 });
 
-const playerIcon = new Style({
+const playerIconStyle = new Style({
   image: new Icon({
     src: playerIconSvg
   }),
@@ -99,8 +99,8 @@ const cityVectorSource = new VectorSource({
     const geometry = new Point(fromLonLat(lonLat));
     const f = new Feature({ name, geometry, droppable: true });
     f.setStyle((feature, resolution) => {
-      cityIcon.getImage().setScale(getScale(resolution));
-      return cityIcon;
+      cityIconStyle.getImage().setScale(getScale(resolution));
+      return cityIconStyle;
     });
     return f;
   }),
@@ -119,8 +119,8 @@ const pathVectorSource = new VectorSource({
       const geometry = new Point(fromLonLat(step));
       const f = new Feature({ geometry, droppable: true });
       f.setStyle((feature, resolution) => {
-        pathIcon.getImage().setScale(getScale(resolution));
-        return pathIcon;
+        pathIconStyle.getImage().setScale(getScale(resolution));
+        return pathIconStyle;
       });
       return f;
     })
@@ -137,8 +137,8 @@ const playerVectorSource = new VectorSource({
     const f = new Feature({ name, geometry, draggable: true });
     f.setId(index);
     f.setStyle((feature, resolution) => {
-      playerIcon.getImage().setScale(getScale(resolution));
-      return playerIcon;
+      playerIconStyle.getImage().setScale(getScale(resolution));
+      return playerIconStyle;
     });
     return f;
   }),
