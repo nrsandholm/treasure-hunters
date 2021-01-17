@@ -91,12 +91,17 @@ const playerIcon = new Style({
   }),
 });
 
+const getScale = (resolution) => 3000 / resolution
+
 const cityVectorSource = new VectorSource({
   features: cities.map((c) => {
     const { name, lonLat } = c;
     const geometry = new Point(fromLonLat(lonLat));
     const f = new Feature({ name, geometry, droppable: true });
-    f.setStyle(cityIcon);
+    f.setStyle((feature, resolution) => {
+      cityIcon.getImage().setScale(getScale(resolution));
+      return cityIcon;
+    });
     return f;
   }),
 });
@@ -113,7 +118,10 @@ const pathVectorSource = new VectorSource({
     .map((step) => {
       const geometry = new Point(fromLonLat(step));
       const f = new Feature({ geometry, droppable: true });
-      f.setStyle(pathIcon);
+      f.setStyle((feature, resolution) => {
+        pathIcon.getImage().setScale(getScale(resolution));
+        return pathIcon;
+      });
       return f;
     })
 });
@@ -128,7 +136,10 @@ const playerVectorSource = new VectorSource({
     const geometry = new Point(fromLonLat(lonLat));
     const f = new Feature({ name, geometry, draggable: true });
     f.setId(index);
-    f.setStyle(playerIcon);
+    f.setStyle((feature, resolution) => {
+      playerIcon.getImage().setScale(getScale(resolution));
+      return playerIcon;
+    });
     return f;
   }),
 });
@@ -153,5 +164,7 @@ const map = new Map({
   view: new View({
     center: fromLonLat([12, 20]),
     zoom: 5,
+    minZoom: 4,
+    maxZoom: 5,
   }),
 });
