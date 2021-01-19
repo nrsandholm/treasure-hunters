@@ -45,7 +45,52 @@ const cities = [{
 }, {
   lonLat: [-17.467686, 14.716677],
   name: 'Dakar',
-}];
+}, {
+  lonLat: [18.42416677, -33.9249],
+  name: 'Cape Town'
+}, {
+  lonLat: [3.3792, 6.5244],
+  name: 'Lagos'
+}, {
+  lonLat: [36.8219, -1.2921],
+  name: 'Nairobi'
+}, {
+  lonLat: [13.2302, -8.8147],
+  name: 'Luanda'
+}, {
+  lonLat: [17.0658, -22.5609],
+  name: 'Windhoek'
+}, {
+  lonLat: [31.0492, -17.8216],
+  name: 'Harare'
+}, {
+  lonLat: [35.7516, -6.1630],
+  name: 'Dodoma'
+}, {
+  lonLat: [15.2663, -4.4419],
+  name: 'Kinshasa'
+}, {
+  lonLat: [28.3228, -15.3875],
+  name: 'Alger'
+}, {
+  lonLat: [45.3182, 2.0469],
+  name: 'Moghadishu'
+}, {
+  lonLat: [-8.0029, 12.6392],
+  name: 'Bamako'
+}, {
+  lonLat: [13.1913, 32.8872],
+  name: 'Tripoli'
+}, {
+  lonLat: [15.0557, 12.1348],
+  name: 'N\'Djamena'
+}, {
+  lonLat: [32.5599, 15.5007],
+  name: 'Khartoum'
+}, {
+  lonLat: [31.5713, 4.8594],
+  name: 'Juba'
+},];
 
 const getPath = (fromCity, toCity) => {
   const [fromCityLon, fromCityLat] = fromCity.lonLat;
@@ -59,14 +104,33 @@ const getPath = (fromCity, toCity) => {
     const lat = fromCityLat + latDiff * (i / stepCount) * (fromCityLat < toCityLat ? 1 : -1);
     steps.push([lon, lat]);
   }
-  return { route: `${fromCity.name}-${toCity.name}`, steps };
+  return { fromCity, toCity, steps };
 }
 
-const paths = [
-  getPath(cities[0], cities[1]),
-  getPath(cities[1], cities[2]),
-  getPath(cities[2], cities[0]),
-];
+const paths = cities
+  .map((fromCity, index, cities_) => {
+    for (const toCity of cities_) {
+      if (fromCity !== toCity) {
+        const path = getPath(fromCity, toCity);
+        fromCity.paths = (fromCity.paths || []).concat(path);
+      }
+    }
+    return fromCity;
+  }, [])
+  // TODO: Remove duplication
+  .reduce((paths_, city) => {
+    return paths_.concat(city.paths);
+  }, [])
+  .map(path => {
+    path.disabled = path.steps.length > 8 || path.steps.length < 2;
+    return path;
+  })
+  .reduce((paths_, path) => {
+    if (!path.disabled) {
+      paths_.push(path);
+    }
+    return paths_;
+  }, []);
 
 const players = [{
   lonLat: [-5.8340, 35.7595],
