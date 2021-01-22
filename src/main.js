@@ -90,6 +90,27 @@ const cities = [{
 }, {
   lonLat: [31.5713, 4.8594],
   name: 'Juba'
+}, {
+  lonLat: [-10.8074, 6.3156],
+  name: 'Monrovia'
+}, {
+  lonLat: [30.0619, -1.9441],
+  name: 'Kigali'
+}, {
+  lonLat: [18.5582, 4.3947],
+  name: 'Bangui'
+}, {
+  lonLat: [2.1254, 13.5116],
+  name: 'Niamey'
+}, {
+  lonLat: [38.9251, 15.3229],
+  name: 'Asmara'
+}, {
+  lonLat: [10.1815, 36.8065],
+  name: 'Tunis'
+}, {
+  lonLat: [-13.1991, 27.1500],
+  name: 'Laayoune'
 },];
 
 const getPath = (fromCity, toCity) => {
