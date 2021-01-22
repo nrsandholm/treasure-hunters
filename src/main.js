@@ -136,16 +136,23 @@ const paths = cities
         fromCity.paths = (fromCity.paths || []).concat(path);
       }
     }
+    fromCity.paths.sort((a, b) => {
+      if (a.steps.length < b.steps.length) return -1;
+      if (a.steps.length > b.steps.length) return 1;
+      return 0;
+    });
+    // Max 2 paths per city
+    fromCity.paths.forEach((path, index) => {
+      if (index > 1) {
+        path.disabled = true;
+      }
+    });
     return fromCity;
   }, [])
   // TODO: Remove duplication
   .reduce((paths_, city) => {
     return paths_.concat(city.paths);
   }, [])
-  .map(path => {
-    path.disabled = path.steps.length > 8 || path.steps.length < 2;
-    return path;
-  })
   .reduce((paths_, path) => {
     if (!path.disabled) {
       paths_.push(path);
